@@ -15,5 +15,11 @@ class Post(models.Model):
         self.published_date = timezone.now()
         self.save()
 
+    def get_pub_stat(self):
+        if self.published_date:
+            return self.published_date
+        else:
+            return "Пост не опубликован"
+
     def __str__(self):
         return self.title

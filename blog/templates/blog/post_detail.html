@@ -7,7 +7,20 @@
                 {{ post.published_date }}
             </div>
         {% endif %}
-        <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+        {% if user.is_authenticated %}
+            {% if not post.published_date %}
+                <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+                <form method="POST" class="post-publish" action="publish/">{% csrf_token %}
+                  {{ form.as_p }}
+                  <button type="submit" class="btn btn-default glyphicon glyphicon-forward"> </button>
+                </form>
+            {% else %}
+                <form method="POST" class="post-unpublish" action="unpublish/">{% csrf_token %}
+                  {{ form.as_p }}
+                  <button type="submit" class="btn btn-default glyphicon glyphicon-backward"> </button>
+                </form>
+            {% endif %}
+        {% endif %}
         <h1>{{ post.title }}</h1>
         <p>{{ post.text|linebreaks }}</p>
     </div>
